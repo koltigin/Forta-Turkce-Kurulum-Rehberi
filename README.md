@@ -66,12 +66,18 @@ apt-get update
 apt-get install forta
 forta init --passphrase SIFRENIZ
 ```
-Yukarıdaki kodların çıktısında Scanner adresinizi göreceksiniz. Bu adrese EVM cüzdanınızadan 0,1 MATIC gönderdikten sonra işlemlere devam ediyoruz.
+Yukarıdaki kodların çıktısında aşağıdaki gibi Scanner adresinizi göreceksiniz. Bu adrese EVM cüzdanınızadan 0,1 MATIC gönderdikten sonra işlemlere devam ediyoruz.
+```shell
+Scanner address: 0xAAA8C491232cB65a65FBf7F36b71220B3E695AAA
+
+Successfully initialized at /root/.forta
+```
 
 ## Alchemy Hesap Oluşturma
 
 [Alchemy](https://alchemy.com/?r=zc3NjI5NzM1NzMxN) adresine giderek bir hesap oluşturuyoruz. Burada `Create App` bölümünden `Polygon Mainnet App` oluşturuyoruz. Burada `View Key` bölümünden `https` ile başlayan linkimizi alıyoruz ve kurulum sırasında Alchemy linki geçen yerde kullanmak üzere bir txt dosyasına kaydediyoruz.
-
+* Eğer node'unuzu başka bir ağda çalıştırmak isterseniz [buradan](https://docs.forta.network/en/latest/scanner-quickstart/) örnekleri görebilirsiniz. Çalıştırmak istediğiniz ağa göre alchemy app oluşturmanız gerekir.
+ 
 ## Yapılandırma Dosyası Oluşturma
 
 ```shell
@@ -128,7 +134,7 @@ systemctl start forta
 
 ## Faydalı Komutlar
 
-### node Durumunu Görme
+### Node Durumunu Görme
 ```shell
 forta status
 ```
