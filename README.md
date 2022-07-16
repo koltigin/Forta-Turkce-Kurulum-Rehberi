@@ -126,18 +126,20 @@ systemctl daemon-reload
 systemctl start forta
 ```
 
+## Faydalı Komutlar
 
-### View logs
-
-CLI logs are made available via stdout. Logs for the rest of the node services and agents can be inspected by doing:
-
+### node Durumunu Görme
 ```shell
-$ docker ps # see the running containers from here
-$ docker logs -f <container_id>
+forta status
 ```
 
-### Stop
+### Logları Görüntüleme
 
+Çalışan konteynerleri görmek için;
+```shell
+docker ps
 ```
-CTRL-C
+Bir konteynerı görmek için;
+```shell
+docker logs -f <container_id>
 ```
