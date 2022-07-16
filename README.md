@@ -1,67 +1,131 @@
+# Forta Network Türkçe Scan Node Kurulum Rehberi
+![image](https://user-images.githubusercontent.com/102043225/179364468-8f51a9ca-c24b-449a-9588-d66104368089.png)
 ![Build](https://github.com/forta-network/forta-node/actions/workflows/release-codedeploy-dev.yml/badge.svg)
 
-# forta-node
+## Bilgi
+Forta Network kurulumu yapabilmeniz için node'unuza 500 Forta token stake etmeniz gerekmektedir. Eylül ayından sonra stake miktarı artacak ve 2500 Forta token stake edenler node çalıştırabilecektir.
 
-Forta node CLI is a Docker container supervisor that runs and manages multiple services and detection bots (agents) to scan a blockchain network and produce alerts.
+## Sistem Gereksinimleri
+* 4CPU+ cores
+* 16GB RAM
+* Docker v20.10+
+* 100GB SSD 
 
-# Running a Node
+## Sistemi Güncelleme
+```shell
+sudo apt update - bunu çıkardım
+sudo apt update && sudo apt upgrade -y
+```
 
-For information about running a node, see the [Scan Node Quickstart Documentation](https://docs.forta.network/en/latest/scanner-quickstart/)
+## Gerekli Kütüphanelerin Kurulması
+```shell
+sudo apt install ca-certificates curl gnupg lsb-release git htop liblz4-tool screen -y < "/dev/null"
+```
+## Docker Kurulumu
+```shell
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update
+apt-get install docker-ce docker-ce-cli containerd.io
+docker version
+```
+## Docker Daemon Dosyasının Oluşturulması
+```shell
+sudo tee /etc/docker/daemon.json > /dev/null <<EOF
+{
+   "default-address-pools": [
+        {
+            "base":"172.17.0.0/12",
+            "size":16
+        },
+        {
+            "base":"192.168.0.0/16",
+            "size":20
+        },
+        {
+            "base":"10.99.0.0/16",
+            "size":24
+        }
+    ]
+}
+EOF
+```
 
-# Scan Node Development
+## Docker'ı Başlatma
+```shell
+systemctl restart docker
+```
 
-## Dependencies
+## Forta Kurulumu
 
-1. [Install Docker](https://docs.docker.com/get-docker/) and start Docker service
-2. [Install Go](https://golang.org/doc/install)
+`SIFRENIZ` bölümüne şifrenizi giriniz. Özel karakter kullanmayınız. Özel karakter kullanımında sorunlar oluşabiliyor.
+```shell
+sudo curl https://dist.forta.network/pgp.public -o /usr/share/keyrings/forta-keyring.asc -s
+echo 'deb [signed-by=/usr/share/keyrings/forta-keyring.asc] https://dist.forta.network/repositories/apt stable main' | sudo tee -a /etc/apt/sources.list.d/forta.list
+apt-get update
+apt-get install forta
+forta init --passphrase SIFRENIZ
+```
+Yukarıdaki kodların çıktısında Scanner adresinizi göreceksiniz. Bu adrese EVM cüzdanınızadan 0,1 MATIC gönderdikten sonra işlemlere devam ediyoruz.
 
-## Dependencies for local development
+## Alchemy Hesap Oluşturma
 
-### Tools
+[Alchemy](https://alchemy.com/?r=zc3NjI5NzM1NzMxN) adresine giderek bir hesap oluşturuyoruz. Burada `Create App` bölümünden `Polygon Mainnet App` oluşturuyoruz. Burada `View Key` bölümünden `https` ile başlayan linkimizi alıyoruz ve kurulum sırasında Alchemy linki geçen yerde kullanmak üzere bir txt dosyasına kaydediyoruz.
 
-Install [Protobuf Compiler](https://grpc.io/docs/protoc-installation/).
-
-### Go libraries
+## Yapılandırma Dosyası Oluşturma
 
 ```shell
-$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc 
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 137
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
 ```
-```shell 
-$ go install github.com/golang/mock/mockgen@v1.5.0
-```
 
-## Build and install
-
-### Full build & install using local version of Go
-
+## Polygon Cüzdanını Kaydetme
+`EVM_ADRESINIZ` bölümünde EVM cüzdan adresinizi ve `SIFRENIZ` yerine de yukarıda Forta kurulumunda belirlediğiniz şifreyi giriyoruz.
 ```shell
-$ make install
+forta register --owner-address EVM_ADRESINIZ --passphrase SIFRENIZ
 ```
 
-For a faster iteration in local development, it is sufficient to build the common service container only if it has changed. The CLI requires `forta-network/forta-node:latest` containers to be available by default and uses the local ones if other Docker image references were not specified at the compile time.
-
-### CLI-only build using the local version of Go
-
+## Servis Dosyası Oluşturma
+`SIFRENIZ` yerine yukarıda Forta kurulumunda belirlediğiniz şifreyi giriyoruz.
 ```shell
-$ go build -o forta .
+sudo tee /lib/systemd/system/forta.service > /dev/null <<EOF
+[Unit]
+Description=Forta
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+Environment="FORTA_DIR=/root/.forta/"
+Environment="FORTA_PASSPHRASE=SIFRENIZ"
+Restart=on-failure
+RestartSec=15s
+
+ExecStart=/usr/bin/forta run
+
+[Install]
+WantedBy=multi-user.target
+EOF
 ```
 
-### CLI-only build using a specific version of Go
-
-Edit Go image version at build stage inside `Dockerfile.cli` and then:
-
+## Forta Node Aktif Etme ve Çalıştırma
 ```shell
-$ make main
+systemctl enable forta
+systemctl daemon-reload
+systemctl start forta
 ```
 
-## Run the node
-
-### Run
-
-```shell
-$ forta init # if you haven't initialized and configured your Forta directory yet
-$ forta run
-```
 
 ### View logs
 
