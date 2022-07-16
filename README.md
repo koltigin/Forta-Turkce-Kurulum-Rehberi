@@ -132,6 +132,9 @@ systemctl daemon-reload
 systemctl start forta
 ```
 
+## Node Durumu
+Node'unuzun SLA değerini kontrol etmek için bu adresin `https://api.forta.network/stats/sla/scanner/0x....` sonuna scanner adresinizi yazarak kontrol edebilirsiniz.
+
 ## Faydalı Komutlar
 
 ### Node Durumunu Görme
