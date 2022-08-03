@@ -13,7 +13,6 @@ Forta Network kurulumu yapabilmeniz için node'unuza 500 Forta token stake etmen
 
 ## Sistemi Güncelleme
 ```shell
-sudo apt update - bunu çıkardım
 sudo apt update && sudo apt upgrade -y
 ```
 
