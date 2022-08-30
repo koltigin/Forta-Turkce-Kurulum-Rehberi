@@ -7,6 +7,8 @@ Forta Network kurulumu yapabilmeniz için node'unuza 500 Forta token stake etmen
 
 Forta node taşımak için [buraya](https://github.com/koltigin/Forta-Turkce-Kurulum-Rehberi/blob/master/Forta-Node-Tasima-Rehberi.md) bakabilirsiniz.
 
+Forta node güncellemek için [buraya](https://github.com/koltigin/Forta-Turkce-Kurulum-Rehberi/blob/master/Forta-Guncelleme.md) bakabilirsiniz.
+
 ## Sistem Gereksinimleri
 * 4CPU+ cores
 * 16GB RAM
