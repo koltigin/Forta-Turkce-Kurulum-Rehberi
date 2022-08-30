@@ -1,5 +1,6 @@
 # Forta Güncelleme
 
+# Güncelleme Yöntemi-1
 ## Güncelleme
 ```shell
 apt-get update
@@ -39,4 +40,14 @@ WantedBy=multi-user.target
 systemctl daemon-reload 
 systemctl restart forta
 systemctl status forta
+```
+
+# Güncelleme Yöntemi-2
+```shell
+systemctl stop forta
+curl https://dist.forta.network/artifacts/forta -o $(which forta)
+chmod +x /usr/bin/forta
+forta version 
+systemctl start forta
+journalctl -fu forta
 ```
