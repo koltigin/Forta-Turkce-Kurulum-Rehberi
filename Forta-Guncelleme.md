@@ -37,6 +37,6 @@ WantedBy=multi-user.target
 ## Sistemi Yeniden Başlatma ve Durum Kontrolü
 ```shell
 systemctl daemon-reload 
-systemctl start forta 
+systemctl restart forta
 systemctl status forta
 ```
