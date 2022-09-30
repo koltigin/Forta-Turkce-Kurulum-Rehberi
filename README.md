@@ -242,3 +242,11 @@ Bir konteynerı görmek için;
 ```shell
 docker logs -f <container_id>
 ```
+
+## Node Silme
+```shell
+systemctl stop forta
+systemctl disable forta
+rm /lib/systemd/system/forta.service -rf
+rm $HOME/.forta -rf
+```
