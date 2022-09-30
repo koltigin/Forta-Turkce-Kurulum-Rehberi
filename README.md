@@ -184,7 +184,7 @@ trace:
 EOF
 ```
 
-## Polygon Cüzdanını Kaydetme
+## Cüzdanı Kaydetme
 `EVM_ADRESINIZ` bölümünde EVM cüzdan adresinizi ve `SIFRENIZ` yerine de yukarıda Forta kurulumunda belirlediğiniz şifreyi giriyoruz.
 ```shell
 forta register --owner-address EVM_ADRESINIZ --passphrase SIFRENIZ
