@@ -100,7 +100,19 @@ EOF
 ```
 
 ### BSC:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 56
 
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
 ### Ethereum:
 ```shell
 rm /root/.forta/config.yml
