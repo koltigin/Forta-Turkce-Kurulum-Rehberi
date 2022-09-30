@@ -82,11 +82,86 @@ Successfully initialized at /root/.forta
 * Eğer node'unuzu başka bir ağda çalıştırmak isterseniz [buradan](https://docs.forta.network/en/latest/scanner-quickstart/) örnekleri görebilirsiniz. Çalıştırmak istediğiniz ağa göre alchemy app oluşturmanız gerekir.
  
 ## Yapılandırma Dosyası Oluşturma
+Hangi ağda çalıştırmak istiyorsanız o ağın aşağıdaki yapılandırmalarını yapmanız gerekmektedir.
 
+### Polygon:
 ```shell
 rm /root/.forta/config.yml
 sudo tee /root/.forta/config.yml > /dev/null <<EOF
 chainId: 137
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
+
+### BSC:
+
+### Ethereum:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 1
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
+### Avalanche:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 43114
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
+### Arbitrum:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 42161
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
+### Optimism:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 10
+
+scan:
+  jsonRpc:
+    url: ALCHEMY_LINKINIZ
+
+trace:
+  enabled: false
+EOF
+```
+### Fantom:
+```shell
+rm /root/.forta/config.yml
+sudo tee /root/.forta/config.yml > /dev/null <<EOF
+chainId: 250
 
 scan:
   jsonRpc:
